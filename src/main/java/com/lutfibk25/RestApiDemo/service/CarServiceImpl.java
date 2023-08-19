@@ -1,34 +1,61 @@
 package com.lutfibk25.RestApiDemo.service;
 
 import com.lutfibk25.RestApiDemo.model.Car;
+import com.lutfibk25.RestApiDemo.repository.CarRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service //identify as a service class
 public class CarServiceImpl implements CarService{
 
-    private static List<Car> Cars= new ArrayList<>();
-    static {
-        Car car1 = new Car();
-        car1.setMaker("Honda");
-        car1.setBodyStyle("SUV");
-        car1.setEngine("V6");
-        car1.setLocation("NJ");
-        Cars.add(car1);
+    @Autowired
+    private CarRepository cRepository;
 
-        car1 = new Car();
-        car1.setMaker("Ferrari");
-        car1.setBodyStyle("Coupe");
-        car1.setEngine("V8");
-        car1.setLocation("NY");
-        car1.setModel("SF90");
-        Cars.add(car1);
-
-    }
     @Override
     public List<Car> getCars() {
-        return Cars;
+        return cRepository.findAll();
     }
+
+    @Override
+    public Car addCar(Car car) {
+        return cRepository.save(car);
+    }
+
+    @Override
+    public Car getCar(Long id) {
+        Optional<Car> car = cRepository.findById(id);
+        if (car.isPresent()){
+            return car.get();
+        } else {
+            throw new RuntimeException("No Car with ID "+ id);
+        }
+    }
+
+    @Override
+    public String removeCar(Long id) {
+        Optional<Car> car = cRepository.findById(id);
+        if (car.isPresent()){
+            cRepository.deleteById(id);
+            return "Car got removed";
+        } else {
+            throw new RuntimeException("No Car with ID "+ id);
+        }
+    }
+
+    @Override
+    public String modifyCarInfo(Long id, Car car) {
+        Optional<Car> carFinder = cRepository.findById(id);
+        if (carFinder.isPresent()){
+            cRepository.save(car);
+            return "Car got updated";
+        } else {
+            throw new RuntimeException("No Car with ID "+ id);
+        }
+    }
+
+
 }

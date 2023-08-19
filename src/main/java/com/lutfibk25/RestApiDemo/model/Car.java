@@ -12,15 +12,15 @@ import lombok.ToString;
 @Setter
 @ToString
 @Entity //represent this class as the database table
-@Table(name="dbl_cars") // table information
+@Table(name="tbl_cars") // table information
 public class Car{
-    @JsonIgnore //ignores this in Response
-    private String previousOwner;
-    @JsonIgnore
-    private String vinNumber;
+//    @JsonIgnore //ignores this in Response
+//    private String previousOwner;
+//    @JsonIgnore
+//    private String vinNumber;
 
     @Id //because it is the primary key
-    @GeneratedValue(strategy = GenerationType.AUTO) //use the strategy of using the underlying table which is to use the increment
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //use the strategy of using the underlying table which is to use the increment
     @Column(name = "id")
     private Long id;
 
@@ -43,7 +43,7 @@ public class Car{
     private String InteriorColor;
     @Column(name = "exterior_color")
     private String exteriorColor;
-    private String location; //We can get from Seller Location
+    // private String location; //We can get from Seller Location
 
 
 }
